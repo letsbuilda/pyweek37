@@ -19,6 +19,9 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = []
 
+[project.scripts]
+"pyweek37" = "pyweek37:main"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 

@@ -1,6 +1,7 @@
 """
 Platformer Template
 """
+
 import arcade
 
 # --- Constants
@@ -28,10 +29,8 @@ class MyGame(arcade.Window):
     """
 
     def __init__(self):
-
         # Call the parent class and set up the window
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT,
-                         SCREEN_TITLE, resizable=True)
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=True)
 
         # Our TileMap Object
         self.tile_map = None
@@ -122,14 +121,15 @@ class MyGame(arcade.Window):
 
         # Draw our score on the screen, scrolling it with the viewport
         score_text = f"Score: {self.score}"
-        arcade.draw_text(score_text,
-                         start_x=10,
-                         start_y=10,
-                         color=arcade.csscolor.WHITE,
-                         font_size=18)
+        arcade.draw_text(
+            score_text,
+            start_x=10,
+            start_y=10,
+            color=arcade.csscolor.WHITE,
+            font_size=18,
+        )
 
     def update_player_speed(self):
-
         # Calculate speed based on the keys pressed
         self.player_sprite.change_x = 0
 
@@ -167,8 +167,12 @@ class MyGame(arcade.Window):
 
     def center_camera_to_player(self):
         # Find where player is, then calculate lower left corner from that
-        screen_center_x = self.player_sprite.center_x - (self.camera_sprites.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (self.camera_sprites.viewport_height / 2)
+        screen_center_x = self.player_sprite.center_x - (
+            self.camera_sprites.viewport_width / 2
+        )
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera_sprites.viewport_height / 2
+        )
 
         # Set some limits on how far we scroll
         if screen_center_x < 0:
@@ -202,7 +206,7 @@ class MyGame(arcade.Window):
         self.center_camera_to_player()
 
     def on_resize(self, width, height):
-        """ Resize window """
+        """Resize window"""
         self.camera_sprites.resize(int(width), int(height))
         self.camera_gui.resize(int(width), int(height))
 

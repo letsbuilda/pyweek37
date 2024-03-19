@@ -32,9 +32,7 @@ class GameWindow(arcade.Window):
         super().__init__(width, height, title)
 
         self.player_sprite: Optional[PlayerSprite] = None
-
         self.scene = None
-
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
 
         arcade.set_background_color(arcade.color.BLUE)
@@ -53,13 +51,10 @@ class GameWindow(arcade.Window):
             "blocks", sprite_list=tile_map.sprite_lists["Blocks"]
         )
         self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
-
         self.player_sprite = self.scene.get_sprite_list("player")[0]
 
-        damping = DEFAULT_DAMPING
-        gravity = (0, -GRAVITY)
         self.physics_engine = arcade.PymunkPhysicsEngine(
-            damping=damping, gravity=gravity
+            damping=DEFAULT_DAMPING, gravity=(0, -GRAVITY)
         )
 
         self.physics_engine.add_collision_handler(
@@ -94,22 +89,16 @@ class GameWindow(arcade.Window):
 
         bullet = BulletSprite(20, 5, arcade.color.DARK_YELLOW)
         self.scene.add_sprite("bullet", bullet)
-
-        start_x = self.player_sprite.center_x
-        start_y = self.player_sprite.center_y
         bullet.position = self.player_sprite.position
 
-        x_diff = x - start_x
-        y_diff = y - start_y
+        x_diff = x - self.player_sprite.center_x
+        y_diff = y - self.player_sprite.center_y
         angle = math.atan2(y_diff, x_diff)
-
         size = max(self.player_sprite.width, self.player_sprite.height) / 2
 
         bullet.center_x += size * math.cos(angle)
         bullet.center_y += size * math.sin(angle)
-
         bullet.angle = math.degrees(angle)
-        bullet_gravity = (0, -BULLET_GRAVITY)
 
         self.physics_engine.add_sprite(
             bullet,
@@ -117,7 +106,7 @@ class GameWindow(arcade.Window):
             damping=1.0,
             friction=0.6,
             collision_type="bullet",
-            gravity=bullet_gravity,
+            gravity=(0, -BULLET_GRAVITY),
             elasticity=0.9,
         )
 
@@ -127,11 +116,11 @@ class GameWindow(arcade.Window):
     def on_update(self, delta_time):
         """Movement and game logic"""
 
-        # Update the player
         self.physics_engine.step()
 
     def on_draw(self):
         """Draw everything"""
+
         self.clear()
 
         self.scene.draw()

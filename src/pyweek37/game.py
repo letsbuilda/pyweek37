@@ -45,11 +45,16 @@ class GameWindow(arcade.Window):
         self.scene.add_sprite_list("bullet")
 
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
-        tile_map = arcade.load_tilemap(map_file, SPRITE_SCALING_TILES)
+        # Make Entities layer use PlayerSprite
+        options = {"Entities": {"custom_class": PlayerSprite}}
+        tile_map = arcade.load_tilemap(
+            map_file, SPRITE_SCALING_TILES, layer_options=options
+        )
 
         self.scene.add_sprite_list(
             "blocks", sprite_list=tile_map.sprite_lists["Blocks"]
         )
+
         self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
         self.player_sprite = self.scene.get_sprite_list("player")[0]
 
@@ -77,6 +82,11 @@ class GameWindow(arcade.Window):
             collision_type="wall",
             body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
+
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        """User moves mouse"""
+
+        self.player_sprite.point_to(x, y)
 
     def on_mouse_press(self, x, y, button, modifiers):
         """User clicks mouse"""

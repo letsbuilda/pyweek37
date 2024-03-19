@@ -1,29 +1,16 @@
-[project]
+[tool.poetry]
 name = "pyweek37"
 version = "0.1.0"
-description = "Add your description here"
-authors = [
-    { name = "Anonymous4045", email = "github@anon4045.email" }
-]
-dependencies = [
-    "arcade>=3.0.0.dev25",
-]
+description = ""
+authors = ["Anonymous4045 <github@anon4045.email>"]
+license = "MIT"
 readme = "README.md"
-requires-python = ">= 3.8"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+arcade = "^2.6.17"
+
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.rye]
-managed = true
-dev-dependencies = []
-
-[project.scripts]
-"pyweek37" = "pyweek37:main"
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/pyweek37"]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,9 +1,24 @@
+"""The main game window"""
+
+import math
+from typing import Optional
+
 import arcade
 
-from typing import Optional
-import math
-
-from .constants import *
+from .constants import (
+    ASSETS_DIR,
+    BULLET_GRAVITY,
+    BULLET_MASS,
+    BULLET_MOVE_FORCE,
+    DEFAULT_DAMPING,
+    GRAVITY,
+    PLAYER_FRICTION,
+    PLAYER_MASS,
+    PLAYER_MAX_HORIZONTAL_SPEED,
+    PLAYER_MAX_VERTICAL_SPEED,
+    SPRITE_SCALING_TILES,
+    WALL_FRICTION,
+)
 from .sprites.bullet import BulletSprite
 from .sprites.player import PlayerSprite
 

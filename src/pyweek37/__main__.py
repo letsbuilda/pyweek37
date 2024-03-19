@@ -1,11 +1,9 @@
-"""
-Example of Pymunk Physics Engine Platformer
-"""
+"""Run the game."""
 
 import arcade
 
+from .constants import SCREEN_HEIGHT, SCREEN_TITLE, SCREEN_WIDTH
 from .game import GameWindow
-from .constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 
 
 def main():

@@ -1,3 +1,5 @@
+"""Bullet Sprite"""
+
 import arcade
 
 

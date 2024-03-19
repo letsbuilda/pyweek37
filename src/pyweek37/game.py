@@ -33,16 +33,7 @@ class GameWindow(arcade.Window):
 
         self.player_sprite: Optional[PlayerSprite] = None
 
-        self.player_list: Optional[arcade.SpriteList] = None
-        self.wall_list: Optional[arcade.SpriteList] = None
-        self.bullet_list: Optional[arcade.SpriteList] = None
-        self.item_list: Optional[arcade.SpriteList] = None
-        self.moving_sprites_list: Optional[arcade.SpriteList] = None
-
-        self.left_pressed: bool = False
-        self.right_pressed: bool = False
-        self.up_pressed: bool = False
-        self.down_pressed: bool = False
+        self.scene = None
 
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
 
@@ -51,16 +42,17 @@ class GameWindow(arcade.Window):
     def setup(self):
         """Set up everything with the game"""
 
-        self.player_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList()
+        self.scene = arcade.Scene()
+        self.scene.add_sprite_list("player")
+        self.scene.add_sprite_list("bullet")
 
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
         tile_map = arcade.load_tilemap(map_file, SPRITE_SCALING_TILES)
 
-        self.wall_list = tile_map.sprite_lists["Blocks"]
-        self.player_sprite = tile_map.sprite_lists["Entities"][0]
+        self.scene.add_sprite_list("blocks", sprite_list=tile_map.sprite_lists["Blocks"])
+        self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
 
-        self.player_list.append(self.player_sprite)
+        self.player_sprite = self.scene.get_sprite_list("player")[0]
 
         damping = DEFAULT_DAMPING
         gravity = (0, -GRAVITY)
@@ -83,7 +75,7 @@ class GameWindow(arcade.Window):
         )
 
         self.physics_engine.add_sprite_list(
-            self.wall_list,
+            self.scene.get_sprite_list("blocks"),
             friction=WALL_FRICTION,
             collision_type="wall",
             body_type=arcade.PymunkPhysicsEngine.STATIC,
@@ -93,7 +85,7 @@ class GameWindow(arcade.Window):
         """Called whenever the mouse button is clicked."""
 
         bullet = BulletSprite(20, 5, arcade.color.DARK_YELLOW)
-        self.bullet_list.append(bullet)
+        self.scene.add_sprite("bullet", bullet)
 
         start_x = self.player_sprite.center_x
         start_y = self.player_sprite.center_y
@@ -136,6 +128,5 @@ class GameWindow(arcade.Window):
     def on_draw(self):
         """Draw everything"""
         self.clear()
-        self.wall_list.draw()
-        self.bullet_list.draw()
-        self.player_list.draw()
+
+        self.scene.draw()

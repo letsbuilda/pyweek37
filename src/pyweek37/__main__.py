@@ -1,6 +1,7 @@
 """
 Example of Pymunk Physics Engine Platformer
 """
+
 import arcade
 
 from .game import GameWindow
@@ -8,7 +9,7 @@ from .constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 
 
 def main():
-    """ Main function """
+    """Main function"""
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcade.run()

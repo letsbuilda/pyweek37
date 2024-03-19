@@ -15,7 +15,7 @@ If you don't want to use Rye, you may also use pip.
 
 Set up your venv and run the following:
 ```bash
-python -m pip install -r requirements.lock
+python -m pip install -r requirements.txt
 python -m src.pyweek37
 ```
 

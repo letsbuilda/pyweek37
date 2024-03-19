@@ -49,7 +49,9 @@ class GameWindow(arcade.Window):
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
         tile_map = arcade.load_tilemap(map_file, SPRITE_SCALING_TILES)
 
-        self.scene.add_sprite_list("blocks", sprite_list=tile_map.sprite_lists["Blocks"])
+        self.scene.add_sprite_list(
+            "blocks", sprite_list=tile_map.sprite_lists["Blocks"]
+        )
         self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
 
         self.player_sprite = self.scene.get_sprite_list("player")[0]
@@ -82,7 +84,13 @@ class GameWindow(arcade.Window):
         )
 
     def on_mouse_press(self, x, y, button, modifiers):
-        """Called whenever the mouse button is clicked."""
+        """User clicks mouse"""
+
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.shoot_bullet(x, y)
+
+    def shoot_bullet(self, x, y):
+        """Shoot a bullet"""
 
         bullet = BulletSprite(20, 5, arcade.color.DARK_YELLOW)
         self.scene.add_sprite("bullet", bullet)
@@ -91,11 +99,8 @@ class GameWindow(arcade.Window):
         start_y = self.player_sprite.center_y
         bullet.position = self.player_sprite.position
 
-        dest_x = x
-        dest_y = y
-
-        x_diff = dest_x - start_x
-        y_diff = dest_y - start_y
+        x_diff = x - start_x
+        y_diff = y - start_y
         angle = math.atan2(y_diff, x_diff)
 
         size = max(self.player_sprite.width, self.player_sprite.height) / 2

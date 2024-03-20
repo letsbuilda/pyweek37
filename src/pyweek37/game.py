@@ -94,10 +94,12 @@ class GameWindow(arcade.Window):
             collision_type="wall",
             body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
+
         self.physics_engine.add_sprite_list(
             self.scene.get_sprite_list("targets"),
-            collision_type="target",
+            friction=WALL_FRICTION,
             mass=BALLOON_MASS,
+            collision_type="target",
             body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
 

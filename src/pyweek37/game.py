@@ -86,8 +86,6 @@ class GameWindow(arcade.Window):
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         """User moves mouse"""
 
-        self.player_sprite.point_to(x, y)
-
     def on_mouse_press(self, x, y, button, modifiers):
         """User clicks mouse"""
 
@@ -126,7 +124,12 @@ class GameWindow(arcade.Window):
     def on_update(self, delta_time):
         """Movement and game logic"""
 
+        self.scene.update()
+
         self.physics_engine.step()
+
+        # Point player to mouse
+        self.player_sprite.point_to(self._mouse_x, self._mouse_y)
 
     def on_draw(self):
         """Draw everything"""

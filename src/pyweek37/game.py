@@ -7,6 +7,7 @@ import arcade
 
 from .constants import (
     ASSETS_DIR,
+    BALLOON_MASS,
     BULLET_GRAVITY,
     BULLET_MASS,
     BULLET_MOVE_FORCE,
@@ -21,6 +22,7 @@ from .constants import (
 )
 from .sprites.bullet import BulletSprite
 from .sprites.player import PlayerSprite
+from .sprites.target import TargetSprite
 
 
 class GameWindow(arcade.Window):
@@ -43,16 +45,23 @@ class GameWindow(arcade.Window):
         self.scene = arcade.Scene()
         self.scene.add_sprite_list("player")
         self.scene.add_sprite_list("bullet")
+        self.scene.add_sprite_list("target")
 
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
-        # Make Entities layer use PlayerSprite
-        options = {"Entities": {"custom_class": PlayerSprite}}
+
+        options = {
+            "Entities": {"custom_class": PlayerSprite},
+            "Targets": {"custom_class": TargetSprite},
+        }
         tile_map = arcade.load_tilemap(
             map_file, SPRITE_SCALING_TILES, layer_options=options
         )
 
         self.scene.add_sprite_list(
             "blocks", sprite_list=tile_map.sprite_lists["Blocks"]
+        )
+        self.scene.add_sprite_list(
+            "targets", sprite_list=tile_map.sprite_lists["Targets"]
         )
 
         self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
@@ -64,6 +73,9 @@ class GameWindow(arcade.Window):
 
         self.physics_engine.add_collision_handler(
             "bullet", "wall", post_handler=BulletSprite.wall_hit_handler
+        )
+        self.physics_engine.add_collision_handler(
+            "target", "bullet", post_handler=TargetSprite.bullet_hit_handler
         )
 
         self.physics_engine.add_sprite(
@@ -83,8 +95,13 @@ class GameWindow(arcade.Window):
             body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
 
-    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
-        """User moves mouse"""
+        self.physics_engine.add_sprite_list(
+            self.scene.get_sprite_list("targets"),
+            friction=WALL_FRICTION,
+            mass=BALLOON_MASS,
+            collision_type="target",
+            body_type=arcade.PymunkPhysicsEngine.STATIC,
+        )
 
     def on_mouse_press(self, x, y, button, modifiers):
         """User clicks mouse"""

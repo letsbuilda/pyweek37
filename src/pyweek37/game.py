@@ -7,6 +7,7 @@ import arcade
 
 from .constants import (
     ASSETS_DIR,
+    BALLOON_MASS,
     BULLET_GRAVITY,
     BULLET_MASS,
     BULLET_MOVE_FORCE,
@@ -47,8 +48,11 @@ class GameWindow(arcade.Window):
         self.scene.add_sprite_list("target")
 
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
-        # Make Entities layer use PlayerSprite
-        options = {"Entities": {"custom_class": PlayerSprite}}
+
+        options = {
+            "Entities": {"custom_class": PlayerSprite},
+            "Targets": {"custom_class": TargetSprite},
+        }
         tile_map = arcade.load_tilemap(
             map_file, SPRITE_SCALING_TILES, layer_options=options
         )
@@ -71,10 +75,7 @@ class GameWindow(arcade.Window):
             "bullet", "wall", post_handler=BulletSprite.wall_hit_handler
         )
         self.physics_engine.add_collision_handler(
-            "bullet",
-            "target",
-            post_handler=BulletSprite.target_hit_handler,
-            separate_handler=TargetSprite.hit_handler,
+            "target", "bullet", post_handler=TargetSprite.bullet_hit_handler
         )
 
         self.physics_engine.add_sprite(
@@ -95,12 +96,10 @@ class GameWindow(arcade.Window):
         )
         self.physics_engine.add_sprite_list(
             self.scene.get_sprite_list("targets"),
-            collision_type="targets",
-            body_type=arcade.PymunkPhysicsEngine.STATIC
+            collision_type="target",
+            mass=BALLOON_MASS,
+            body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
-        
-    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
-        """User moves mouse"""
 
     def on_mouse_press(self, x, y, button, modifiers):
         """User clicks mouse"""
@@ -137,8 +136,6 @@ class GameWindow(arcade.Window):
         force = (BULLET_MOVE_FORCE, 0)
         self.physics_engine.apply_force(bullet, force)
 
-    def on_target_hit(self):
-        ...
     def on_update(self, delta_time):
         """Movement and game logic"""
 

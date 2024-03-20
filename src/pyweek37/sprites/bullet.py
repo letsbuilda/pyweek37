@@ -16,3 +16,7 @@ class BulletSprite(arcade.SpriteSolidColor):
         """Called for bullet/wall collision"""
 
         self.remove_from_sprite_lists()
+    def target_hit_handler(self):
+        """Called for bullet/target collision"""
+        self.remove_from_sprite_lists()
+        

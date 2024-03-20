@@ -21,6 +21,7 @@ from .constants import (
 )
 from .sprites.bullet import BulletSprite
 from .sprites.player import PlayerSprite
+from .sprites.target import TargetSprite
 
 
 class GameWindow(arcade.Window):
@@ -43,6 +44,7 @@ class GameWindow(arcade.Window):
         self.scene = arcade.Scene()
         self.scene.add_sprite_list("player")
         self.scene.add_sprite_list("bullet")
+        self.scene.add_sprite_list("target")
 
         map_file = ASSETS_DIR / "tiled" / "map.tmx"
         # Make Entities layer use PlayerSprite
@@ -54,6 +56,9 @@ class GameWindow(arcade.Window):
         self.scene.add_sprite_list(
             "blocks", sprite_list=tile_map.sprite_lists["Blocks"]
         )
+        self.scene.add_sprite_list(
+            "targets", sprite_list=tile_map.sprite_lists["Targets"]
+        )
 
         self.scene.add_sprite("player", tile_map.sprite_lists["Entities"][0])
         self.player_sprite = self.scene.get_sprite_list("player")[0]
@@ -64,6 +69,12 @@ class GameWindow(arcade.Window):
 
         self.physics_engine.add_collision_handler(
             "bullet", "wall", post_handler=BulletSprite.wall_hit_handler
+        )
+        self.physics_engine.add_collision_handler(
+            "bullet",
+            "target",
+            post_handler=BulletSprite.target_hit_handler,
+            separate_handler=TargetSprite.hit_handler,
         )
 
         self.physics_engine.add_sprite(
@@ -82,7 +93,12 @@ class GameWindow(arcade.Window):
             collision_type="wall",
             body_type=arcade.PymunkPhysicsEngine.STATIC,
         )
-
+        self.physics_engine.add_sprite_list(
+            self.scene.get_sprite_list("targets"),
+            collision_type="targets",
+            body_type=arcade.PymunkPhysicsEngine.STATIC
+        )
+        
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         """User moves mouse"""
 
@@ -121,6 +137,8 @@ class GameWindow(arcade.Window):
         force = (BULLET_MOVE_FORCE, 0)
         self.physics_engine.apply_force(bullet, force)
 
+    def on_target_hit(self):
+        ...
     def on_update(self, delta_time):
         """Movement and game logic"""
 

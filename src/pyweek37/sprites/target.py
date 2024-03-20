@@ -16,4 +16,4 @@ class TargetSprite(arcade.Sprite):
         """Called for bullet/target collision"""
 
         self.remove_from_sprite_lists()
-        _bullet_sprite.remove_from_sprite_lists()
+        # _bullet_sprite.remove_from_sprite_lists()

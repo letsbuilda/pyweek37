@@ -1,0 +1,20 @@
+GIMP Palette
+#Palette Name: Super16
+#Description: A Super Nintendo Sprite Palette I Made With The 16  Color Limit Of The SNES Palette, And Uses The 15 Bit RGB Of The SNES, "Each SNES sprite can have 16 colors and a palette slot out of 8 total palette slots." (https://megacatstudios.com/blogs/retro-development/snes-sprite-engine-design-guidelines)
+#Colors: 16
+144	32	104	902068
+248	24	104	f81868
+255	168	128	ffa880
+255	112	0	ff7000
+168	0	16	a80010
+255	168	0	ffa800
+255	255	168	ffffa8
+168	224	56	a8e038
+88	0	168	5800a8
+104	40	255	6828ff
+255	255	255	ffffff
+224	208	255	e0d0ff
+160	112	200	a070c8
+104	48	144	683090
+72	24	104	481868
+0	0	0	000000
